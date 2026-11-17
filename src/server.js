@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const APP_SECRET = process.env.APP_SECRET;
 
-// Deduplicação simples de mensagens (a Meta pode reenviar o mesmo evento).
+// DeduplicaÃ§Ã£o simples de mensagens (a Meta pode reenviar o mesmo evento).
 const processedMessageIds = new Set();
 function markProcessed(id) {
   processedMessageIds.add(id);
@@ -28,7 +28,7 @@ function markProcessed(id) {
   }
 }
 
-// --- Verificação do webhook (handshake inicial da Meta) ---
+// --- VerificaÃ§Ã£o do webhook (handshake inicial da Meta) ---
 app.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
@@ -39,7 +39,7 @@ app.get("/webhook", (req, res) => {
     return res.status(200).send(challenge);
   }
 
-  console.warn("[webhook] Falha na verificação.");
+  console.warn("[webhook] Falha na verificaÃ§Ã£o.");
   return res.sendStatus(403);
 });
 
@@ -60,11 +60,11 @@ function isValidSignature(req) {
 // --- Recebimento de eventos (mensagens, status, etc.) ---
 app.post("/webhook", (req, res) => {
   if (!isValidSignature(req)) {
-    console.warn("[webhook] Assinatura inválida.");
+    console.warn("[webhook] Assinatura invÃ¡lida.");
     return res.sendStatus(401);
   }
 
-  // Responde imediatamente; processa de forma assíncrona depois.
+  // Responde imediatamente; processa de forma assÃ­ncrona depois.
   res.sendStatus(200);
 
   processWebhookEvent(req.body).catch((err) => {
@@ -83,6 +83,9 @@ async function processWebhookEvent(body) {
 
   for (const status of statuses) {
     console.log("[status]", status.id, status.status);
+    if (status.status === "failed" && status.errors) {
+      console.error("[status] Detalhes do erro:", JSON.stringify(status.errors));
+    }
   }
 
   for (const msg of messages) {
@@ -102,7 +105,7 @@ async function processWebhookEvent(body) {
         text: msg.interactive.button_reply.title,
       };
     } else {
-      console.log("[msg] Tipo de mensagem não tratado:", msg.type);
+      console.log("[msg] Tipo de mensagem nÃ£o tratado:", msg.type);
       continue;
     }
 
@@ -123,7 +126,7 @@ async function processWebhookEvent(body) {
 }
 
 app.get("/", (req, res) => {
-  res.send("BotAdv está no ar.");
+  res.send("BotAdv estÃ¡ no ar.");
 });
 
 app.listen(PORT, () => {
