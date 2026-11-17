@@ -71,7 +71,7 @@ export async function handleMessage(from, message) {
     case "agendar_nome": {
       session.data.nome = text;
       session.step = "agendar_assunto";
-      await sendText(from, \`Obrigado, \${text}! Qual o assunto da consulta?\`);
+      await sendText(from, `Obrigado, ${text}! Qual o assunto da consulta?`);
       break;
     }
 
@@ -81,14 +81,14 @@ export async function handleMessage(from, message) {
       // TODO: persistir o agendamento (banco de dados, planilha, calendário, etc.)
       await sendText(
         from,
-        \`Perfeito! Recebemos sua solicitação de consulta sobre "\${session.data.assunto}". Nossa equipe entrará em contato para confirmar o horário.\`
+        `Perfeito! Recebemos sua solicitação de consulta sobre "${session.data.assunto}". Nossa equipe entrará em contato para confirmar o horário.`
       );
       resetSession(from);
       break;
     }
 
     case "processo_cpf": {
-      const cpf = text.replace(/\\D/g, "");
+      const cpf = text.replace(/\D/g, "");
       if (cpf.length !== 11) {
         await sendText(from, "CPF inválido. Por favor, envie os 11 números do CPF, sem pontos ou traços.");
         break;
