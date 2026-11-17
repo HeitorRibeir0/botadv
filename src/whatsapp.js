@@ -2,14 +2,14 @@ const GRAPH_VERSION = process.env.GRAPH_VERSION || "v25.0";
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 
-const BASE_URL = \`https://graph.facebook.com/\${GRAPH_VERSION}/\${PHONE_NUMBER_ID}/messages\`;
+const BASE_URL = `https://graph.facebook.com/${GRAPH_VERSION}/${PHONE_NUMBER_ID}/messages`;
 
 async function callGraphAPI(payload) {
   const res = await fetch(BASE_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: \`Bearer \${WHATSAPP_TOKEN}\`,
+      Authorization: `Bearer ${WHATSAPP_TOKEN}`,
     },
     body: JSON.stringify(payload),
   });
@@ -18,7 +18,7 @@ async function callGraphAPI(payload) {
 
   if (!res.ok) {
     console.error("[whatsapp] Erro na API:", JSON.stringify(data));
-    throw new Error(\`WhatsApp API error \${res.status}: \${JSON.stringify(data)}\`);
+    throw new Error(`WhatsApp API error ${res.status}: ${JSON.stringify(data)}`);
   }
 
   return data;
