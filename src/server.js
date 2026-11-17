@@ -106,7 +106,7 @@ async function processWebhookEvent(body) {
       continue;
     }
 
-    console.log(\`[msg] \${contactName} (\${from}):\`, parsed.text || parsed.buttonId);
+    console.log(`[msg] ${contactName} (${from}):`, parsed.text || parsed.buttonId);
 
     try {
       await markAsRead(msg.id);
@@ -127,5 +127,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(\`BotAdv ouvindo em http://localhost:\${PORT}\`);
+  console.log(`BotAdv ouvindo em http://localhost:${PORT}`);
 });
